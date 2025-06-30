@@ -12,13 +12,13 @@ import mephi.b23902.i.mortalcombat.player.Player;
  * Реализует интерфейс EnemyFabricInterface, предоставляя стандартные
  * характеристики для этого типа персонажа.
  * 
- * <p>Создаваемый SubZero имеет следующие параметры:
- * <ul>
- *   <li><b>Уровень:</b> 1</li>
- *   <li><b>Здоровье:</b> 60</li>
- *   <li><b>Сила атаки:</b> 16</li>
- *   <li><b>Навык:</b> 1</li>
- * </ul>
+ * Создаваемый SubZero имеет следующие параметры:
+ * 
+ * - Уровень: 1
+ * - Здоровье: 60
+ * - Сила атаки: 16
+ * - Навык: 1
+ *
  */
 public class SubZeroFabric implements EnemyFabricInterface {
 

@@ -13,6 +13,7 @@ public class LiuKangFabric implements EnemyFabricInterface {
     /**
      * Создает и возвращает нового противника типа Liu Kang.
      * Характеристики противника фиксированы:
+     * 
      * - Уровень: 1
      * - Здоровье: 70
      * - Сила: 20

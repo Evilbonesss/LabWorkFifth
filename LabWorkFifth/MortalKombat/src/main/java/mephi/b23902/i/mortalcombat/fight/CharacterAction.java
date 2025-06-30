@@ -1,4 +1,3 @@
-
 package mephi.b23902.i.mortalcombat.fight;
 
 import javax.swing.ImageIcon;
@@ -15,19 +14,31 @@ import mephi.b23902.i.mortalcombat.player.Human;
 import mephi.b23902.i.mortalcombat.player.Items;
 import mephi.b23902.i.mortalcombat.player.Player;
 
+/**
+ * Класс CharacterAction управляет действиями персонажей,
+ * выбором и настройкой противников, начислением очков и опыта,
+ * выдачей предметов, а также логикой поведения врагов.
+ */
 public class CharacterAction {
 
-    private  int experience_for_next_level = 40;
+    /** Необходимое количество опыта для повышения уровня */
+    private int experience_for_next_level = 40;
     
-
+    /** Массив шаблонов поведения врага (атака/защита) */
     private final int kind_fight[][] = {{1, 0}, {1, 1, 0}, {0, 1, 0}, {1, 1, 1, 1}};
-
+    
+    /** Массив доступных врагов */
     private Player enemyes[] = new Player[6];
 
+    /** Фабрика для создания врагов */
     EnemyFabric fabric = new EnemyFabric();
 
+    /** Текущий выбранный враг */
     private Player enemyy = null;
 
+    /**
+     * Создает массив врагов, используя EnemyFabric.
+     */
     public void setEnemyes() {
         enemyes[0] = fabric.create(0, 0);
         enemyes[1] = fabric.create(1, 0);
@@ -37,10 +48,22 @@ public class CharacterAction {
         enemyes[5] = fabric.create(4, 0);
     }
 
+    /**
+     * Возвращает массив всех врагов.
+     * @return массив врагов
+     */
     public Player[] getEnemyes() {
         return this.enemyes;
     }
 
+    /**
+     * Случайно выбирает врага для битвы, обновляет интерфейс.
+     * @param label JLabel для изображения врага
+     * @param label2 JLabel для имени врага
+     * @param text JLabel для урона врага
+     * @param label3 JLabel для HP врага
+     * @return выбранный враг
+     */
     public Player ChooseEnemy(JLabel label, JLabel label2, JLabel text, JLabel label3) {
         int i = (int) (Math.random() * 4);
         ImageIcon icon1 = null;
@@ -56,7 +79,6 @@ public class CharacterAction {
                 break;
             case 3:
                 enemyy = enemyes[3];
-
                 break;
         }
         label.setIcon(enemyy.getPicture());
@@ -66,6 +88,16 @@ public class CharacterAction {
         return enemyy;
     }
 
+    /**
+     * Выбирает и настраивает босса для битвы, обновляет интерфейс.
+     * @param label JLabel для изображения
+     * @param label2 JLabel для имени
+     * @param text JLabel для урона
+     * @param label3 JLabel для HP
+     * @param i текущий индекс врага
+     * @param human игрок
+     * @return босс
+     */
     public Player ChooseBoss(JLabel label, JLabel label2, JLabel text, JLabel label3, int i, Player human) {
 
         label2.setText("Shao Kahn - БОСС");
@@ -83,6 +115,16 @@ public class CharacterAction {
         return enemyy;
     }
 
+    /**
+     * Генерирует шаблон поведения врага на основе вероятностей.
+     * @param k1 вероятность поведения 1
+     * @param k2 вероятность поведения 2
+     * @param k3 вероятность поведения 3
+     * @param k4 вероятность поведения 4
+     * @param i случайное число для выбора
+     * @param isWizard признак мага
+     * @return массив шаблона поведения
+     */
     public int[] EnemyBehavior(int k1, int k2, int k3, int k4, double i, Boolean isWizard) {
         int arr[] = null;
         if (i < k1 * 0.01) {
@@ -100,6 +142,12 @@ public class CharacterAction {
         return arr;
     }
 
+    /**
+     * Выбирает шаблон поведения для конкретного врага.
+     * @param enemy враг
+     * @param action объект CharacterAction
+     * @return массив действий поведения
+     */
     public int[] ChooseBehavior(Player enemy, CharacterAction action) {
         int arr[] = null;
         double i = Math.random();
@@ -121,8 +169,12 @@ public class CharacterAction {
         return arr;
     }
 
+    /**
+     * Обновляет прогресс-бар здоровья игрока/врага.
+     * @param player персонаж
+     * @param progress JProgressBar для отображения здоровья
+     */
     public void HP(Player player, JProgressBar progress) {
-
         if (player.getHealth() >= 0) {
             progress.setValue(player.getHealth());
         } else {
@@ -130,10 +182,19 @@ public class CharacterAction {
         }
     }
     
+    /**
+     * Заглушка для действия "Ослабление".
+     */
     public void useWeakness() {
         
     }
 
+    /**
+     * Начисляет игроку опыт и очки за победу, обновляет уровень при необходимости.
+     * @param human игрок
+     * @param enemyes массив врагов
+     * @return true, если уровень повышен
+     */
     public Boolean AddPoints(Human human, Player[] enemyes) {
         switch (human.getLevel()) {
             case 0:
@@ -158,24 +219,26 @@ public class CharacterAction {
                 break;
         }
         Boolean isLevelUp = false;
-            System.out.println(experience_for_next_level + " и " +  human.getExperience());
-            
-            if (experience_for_next_level <= human.getExperience()) {   
-                
-                human.setLevel();
-                isLevelUp = true;
-                experience_for_next_level += human.getExperience();
-                human.setNextExperience(experience_for_next_level);
-                NewHealthHuman(human);
-                for (int j = 0; j < 4; j++) {
-                    NewHealthEnemy(enemyes[j], human);
-                }
-                
-            }
+        System.out.println(experience_for_next_level + " и " +  human.getExperience());
         
+        if (experience_for_next_level <= human.getExperience()) {   
+            human.setLevel();
+            isLevelUp = true;
+            experience_for_next_level += human.getExperience();
+            human.setNextExperience(experience_for_next_level);
+            NewHealthHuman(human);
+            for (int j = 0; j < 4; j++) {
+                NewHealthEnemy(enemyes[j], human);
+            }
+        }
         return isLevelUp;
     }
 
+    /**
+     * Начисляет опыт и очки за победу над боссом, обновляет уровень при необходимости.
+     * @param human игрок
+     * @param enemyes массив врагов
+     */
     public void AddPointsBoss(Human human, Player[] enemyes) {
         switch (human.getLevel()) {
             case 2:
@@ -187,22 +250,26 @@ public class CharacterAction {
                 human.setPoints(65 + human.getHealth() / 2);
                 break;
         }
-            if (experience_for_next_level <= human.getExperience()) {
-                human.setLevel();
-                
-                experience_for_next_level += human.getExperience();
-                human.setNextExperience(experience_for_next_level);
-                NewHealthHuman(human);
-                for (int j = 0; j < 4; j++) {
-                    NewHealthEnemy(enemyes[j], human);
-                }
+        if (experience_for_next_level <= human.getExperience()) {
+            human.setLevel();
+            experience_for_next_level += human.getExperience();
+            human.setNextExperience(experience_for_next_level);
+            NewHealthHuman(human);
+            for (int j = 0; j < 4; j++) {
+                NewHealthEnemy(enemyes[j], human);
             }
-        
+        }
     }
 
+    /**
+     * Генерирует выпадающий предмет для инвентаря игрока по заданным вероятностям.
+     * @param k1 вероятность малого зелья
+     * @param k2 вероятность большого зелья
+     * @param k3 вероятность креста
+     * @param items массив предметов
+     */
     public void AddItems(int k1, int k2, int k3, Items[] items) {
         double i = Math.random();
-    
         if (i < k1 * 0.01) {
             items[0].setCount(1);
         }
@@ -214,6 +281,10 @@ public class CharacterAction {
         }
     }
 
+    /**
+     * Устанавливает новое значение здоровья и урона для игрока при повышении уровня.
+     * @param human игрок
+     */
     public void NewHealthHuman(Human human) {
         int hp = 0;
         int damage = 0;
@@ -239,6 +310,11 @@ public class CharacterAction {
         human.setDamage(damage);
     }
 
+    /**
+     * Устанавливает новое значение здоровья и урона для врага при повышении уровня игрока.
+     * @param enemy враг
+     * @param human игрок
+     */
     public void NewHealthEnemy(Player enemy, Human human) {
         int hp = 0;
         int damage = 0;
@@ -265,6 +341,14 @@ public class CharacterAction {
         enemy.setLevel();
     }
 
+    /**
+     * Применяет предмет к игроку по его названию. Обновляет интерфейс.
+     * @param human игрок
+     * @param items массив предметов
+     * @param name имя используемого предмета (radioButton)
+     * @param dialog окно для сообщения об ошибке
+     * @param dialog1 окно инвентаря
+     */
     public void UseItem(Player human, Items[] items, String name, JDialog dialog, JDialog dialog1) {
         switch (name) {
             case "jRadioButton1":
@@ -294,7 +378,6 @@ public class CharacterAction {
                 }
                 break;
         }
-        
         if(dialog.isVisible()==false){
             dialog1.dispose();
         }
