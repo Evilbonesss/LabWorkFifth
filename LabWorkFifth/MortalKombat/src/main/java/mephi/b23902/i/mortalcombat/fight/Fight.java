@@ -32,8 +32,6 @@ public class Fight {
     private final ChangeTexts change = new ChangeTexts();
     /** Массив шаблонов атаки врага */
     private int[] kind_attack = {0};
-    /** Требуемый опыт для каждого уровня */
-    private final int[] experiences = {40, 90, 180, 260, 410};
     /** Фабрика противников */
     private final EnemyFabric fabric = new EnemyFabric();
     /** Счетчик ходов */
