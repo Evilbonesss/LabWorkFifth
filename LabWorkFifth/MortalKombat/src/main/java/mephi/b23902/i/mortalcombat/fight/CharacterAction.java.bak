@@ -221,20 +221,15 @@ public class CharacterAction {
         Boolean isLevelUp = false;
         System.out.println(experience_for_next_level + " и " +  human.getExperience());
         
-
-        // handle level-ups: allow multiple levels if enough experience
-        int baseExp = 40;
-        while (human.getExperience() >= human.getNextExperience()) {
-            int threshold = human.getNextExperience();
-            // subtract threshold from current experience
-            human.setExperience(-threshold);
+        if (experience_for_next_level <= human.getExperience()) {   
             human.setLevel();
-            human.setNextExperience(human.getNextExperience() + baseExp);
+            isLevelUp = true;
+            experience_for_next_level += human.getExperience();
+            human.setNextExperience(experience_for_next_level);
             NewHealthHuman(human);
             for (int j = 0; j < 4; j++) {
                 NewHealthEnemy(enemyes[j], human);
             }
-            isLevelUp = true;
         }
         return isLevelUp;
     }
@@ -255,14 +250,10 @@ public class CharacterAction {
                 human.setPoints(65 + human.getHealth() / 2);
                 break;
         }
-
-        // handle level-ups (boss XP): allow multiple levels
-        int baseExp = 40;
-        while (human.getExperience() >= human.getNextExperience()) {
-            int threshold = human.getNextExperience();
-            human.setExperience(-threshold);
+        if (experience_for_next_level <= human.getExperience()) {
             human.setLevel();
-            human.setNextExperience(human.getNextExperience() + baseExp);
+            experience_for_next_level += human.getExperience();
+            human.setNextExperience(experience_for_next_level);
             NewHealthHuman(human);
             for (int j = 0; j < 4; j++) {
                 NewHealthEnemy(enemyes[j], human);
@@ -380,11 +371,8 @@ public class CharacterAction {
                 break;
             case "jRadioButton3":
                 if (items[2].getCount() > 0) {
-                    // Resurrection cross cannot be used manually; remind the player to save it for death.
-                    javax.swing.JOptionPane.showMessageDialog(dialog,
-                        "Постой, он тебе ещё пригодится",
-                        "Крест воскрешения",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    human.setNewHealth((int) (human.getMaxHealth() * 0.05));
+                    items[2].setCount(-1); 
                 } else {
                     dialog.setVisible(true);
                 }

@@ -48,6 +48,8 @@ public class Fight {
     private int currentLocationsCount = 0;
     /** Количество уровней в локации */
     private int levelCount;
+    /** Общее количество врагов в текущей локации (фиксируется при старте локации) */
+    private int totalEnemiesInLocation = 0;
 
     /**
      * Карта обработчиков взаимодействий по ключу:
@@ -475,6 +477,7 @@ public class Fight {
         if (currentLocationsCount < locationsCount) {
             currentLocationsCount++;
             levelCount = (int) (Math.random() * 3) + human.getLevel() + 1;
+            totalEnemiesInLocation = levelCount;
         }
     }
 
@@ -486,6 +489,30 @@ public class Fight {
     public int getCurrentLocationsCount() {
         return currentLocationsCount;
     }
+
+    /**
+     * Получить общее количество врагов в текущей локации (зафиксированное при её создании).
+     * @return общее число врагов в локации
+     */
+    
+    /** Получить общее количество локаций, заданных в игре. */
+    public int getLocationsCount() {
+        return locationsCount;
+    }
+
+public int getTotalEnemiesInLocation() {
+        return totalEnemiesInLocation;
+    }
+
+    /**
+     * Получить индекс текущего противника в локации (1-based).
+     * @return индекс текущего противника или 0, если не задано
+     */
+    public int getCurrentEnemyIndex() {
+        if (totalEnemiesInLocation <= 0) return 0;
+        return totalEnemiesInLocation - levelCount + 1;
+    }
+
 
     /**
      * Сбросить счетчик локаций на ноль.

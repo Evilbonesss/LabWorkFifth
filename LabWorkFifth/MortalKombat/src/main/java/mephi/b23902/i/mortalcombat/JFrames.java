@@ -16,10 +16,7 @@ import mephi.b23902.i.mortalcombat.player.Items;
 import mephi.b23902.i.mortalcombat.player.Player;
 
 
-/**
- *
- * @author Мария
- */
+
 public class JFrames extends javax.swing.JFrame {
     
     Game game = new Game();
@@ -315,6 +312,12 @@ public class JFrames extends javax.swing.JFrame {
 
         locationLable.setText("jLabel2");
         jPanel2.add(locationLable, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 80, 20));
+        enemyLabel = new javax.swing.JLabel();
+        enemyLabel.setBackground(new java.awt.Color(0, 0, 0));
+        enemyLabel.setFont(new java.awt.Font("Comic Sans MS", 2, 14)); // NOI18N
+        enemyLabel.setForeground(new java.awt.Color(0, 0, 0));
+        enemyLabel.setText("Противник: 0/0");
+        jPanel2.add(enemyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 150, 20));
 
         jFrame1.getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 740));
 
@@ -904,7 +907,7 @@ public class JFrames extends javax.swing.JFrame {
                 effectLabel, informationLabel, game.fight.turnCounter, items, jRadioButton1, jRadioButton2, jRadioButton3);
         
                 checkAndDisableButtons() ;
-                locationLable.setText("Локация №"+game.getFight().getCurrentLocationsCount());
+                locationLable.setText("Локация: " + game.getFight().getCurrentLocationsCount() + "/" + game.getFight().getLocationsCount());
 
                 jDialog1.dispose();
 
@@ -1009,6 +1012,7 @@ public class JFrames extends javax.swing.JFrame {
             game.getFight().prepareLocationAndRounds();
             locationLable.setText("Локация №"+game.getFight().getCurrentLocationsCount());
             enemy = game.NewEnemy(enemyPicture, enemyName, enemyDamageCount,enemyHPPoints, enemyHPProgressBar);
+            enemyLabel.setText("Противник: " + game.getFight().getCurrentEnemyIndex() + "/" + game.getFight().getTotalEnemiesInLocation());
             game.change.NewRoundTexts(human, enemy, playerHPProgressBar, enemyHPProgressBar, 
                     pointCountLabe, expCountLabel, playerLevel, enemyLevel, hpPoints,enemyHPPoints, damageCountLabel,
                     effectLabel, informationLabel, game.fight.turnCounter, items, jRadioButton1, jRadioButton2, jRadioButton3);
@@ -1139,6 +1143,7 @@ public class JFrames extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel locationLable;
+    private javax.swing.JLabel enemyLabel;
     private javax.swing.JLabel locationsDialogTitle;
     private javax.swing.JLabel newLevelLabel;
     private javax.swing.JProgressBar playerHPProgressBar;
